@@ -1,4 +1,5 @@
 let Survey = require('../models/survey.server.model');
+let Response = require('../models/response.server.model');
 
 exports.getSurveys = function(req, res, next){
     if(req.session.lastVisit){
@@ -8,27 +9,6 @@ exports.getSurveys = function(req, res, next){
 
     try{
         Survey.find({}, (err, surveys) => {
-            if(err){
-                res.json(err);
-                return next(err);
-            }else {
-                res.json(surveys);
-            }
-        })
-    }catch(error){
-        res.json(error);
-        next(error);
-    }
-}
-
-exports.getAvailableSurveys = function(req, res, next){
-    try{
-        Survey.find({ $and: 
-                            [ 
-                                { startDate: { $lte: new Date(Date.now()).toISOString().split('T')[0], $nin: [ "" ] } },
-                                { endDate: { $gte: new Date(Date.now()).toISOString().split('T')[0], $nin: [ "" ]  } }
-                            ]   
-                    }, (err, surveys) => {
             if(err){
                 res.json(err);
                 return next(err);
@@ -110,7 +90,57 @@ exports.deleteSurvey = function(req, res){
         }
         else
         {
-            console.log('t');
+        }
+    });
+}
+
+exports.getResponsesBySurvey = function(req, res, next){
+    let surveyId = req.params.surveyId;
+    try{
+        Response.countDocuments({"surveyId": surveyId}, (err, result) => {
+            if(err){
+                res.json(err);
+                return next(err);
+            }else {
+                res.json(result);
+            }
+        })
+    }catch(error){
+        res.json(error);
+        next(error);
+    }
+}
+
+exports.getResponsesBySurveyQuestion = function(req, res, next){
+    let surveyId = req.params.surveyId;
+    let questionId = req.params.questionId;
+    let response = req.params.response;
+    
+    try{
+        Response.countDocuments({"surveyId": surveyId, "questions.questionId": questionId, "questions.response": response}, (err, result) => {
+            if(err){
+                res.json(err);
+                return next(err);
+            }else {
+                res.json(result);
+            }
+        })
+    }catch(error){
+        res.json(error);
+        next(error);
+    }
+}
+
+exports.createResponse = function(req, res){
+    Response.create(req.body, (err, response) =>{
+        if(err)
+        {
+            console.log(err);
+            res.end(err);
+        }
+        else
+        {
+            res.status(200);
         }
     });
 }
