@@ -149,7 +149,7 @@ exports.createResponse = function(req, res){
 }
 
 
-exports.postLogin = function(req, res){
+/*exports.postLogin = function(req, res){
     
     console.log(req.body);
     
@@ -179,4 +179,6 @@ exports.postLogin = function(req, res){
             res.json(response);
         }
     });
-}
+
+
+}*/
