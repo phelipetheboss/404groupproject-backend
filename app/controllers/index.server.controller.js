@@ -1,5 +1,8 @@
 let Survey = require('../models/survey.server.model');
 let Response = require('../models/response.server.model');
+let User = require('../models/user.server.model');
+let LoginResponse = require('../models/loginResponse.module');
+const { response } = require('express');
 
 exports.getSurveys = function(req, res, next){
     if(req.session.lastVisit){
@@ -141,6 +144,39 @@ exports.createResponse = function(req, res){
         else
         {
             res.status(200);
+        }
+    });
+}
+
+
+exports.postLogin = function(req, res){
+    
+    console.log(req.body);
+    
+    let email = req.body.name;
+    User.findOne({email:email}, (err, user) => {
+        if(err)
+        {
+            console.log(err);
+            res.end(err);
+        }
+        else
+        {
+            console.log(user);
+            if(user){
+                let response = new LoginResponse({
+                    success: true,
+                    token: "asdfasdfasdfasfdfgkhguyrhduhgerhgui 487ty73yt873yt782"
+                });
+
+            } else {
+                let response = new LoginResponse({
+                    success: false,
+                    token: ""
+                });
+            }
+            console.log(response);
+            res.json(response);
         }
     });
 }

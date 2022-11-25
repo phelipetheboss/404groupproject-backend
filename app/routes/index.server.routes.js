@@ -11,4 +11,7 @@ module.exports = function(app){
     app.get('/api/get/responses/:surveyId/:questionId/:response', index.getResponsesBySurveyQuestion);
     app.get('/api/get/responses/:surveyId', index.getResponsesBySurvey);
     app.post('/api/post/responses', index.createResponse);
+
+    //Login
+    app.post('/api/login', index.postLogin);
 }
