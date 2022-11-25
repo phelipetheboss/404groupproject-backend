@@ -48,7 +48,7 @@ module.exports = function(){
     app.use(passport.initialize());
     app.use(passport.session());
 
-    app.use(cors({ origin: '*'}));
+    app.use(cors());
 
     app.use(express.static('./public'));
 
