@@ -3,8 +3,8 @@ let passport = require('passport');
 let User = require('../models/user.server.model');
 
 exports.logoutUser = (req, res) => {
-    req.Logout();
-    res.json('Logged out succesfully');
+    req.logout();
+    res.json('Logged out successfully');
 }
 
 exports.loginUser = (req, res, next) => {
@@ -54,7 +54,7 @@ exports.registerUser = (req, res) => {
     const hash = saltHash.hash;
 
     const newUser = new User({
-        username: req.body.userName,
+        username: req.body.username,
         email: req.body.email,
         displayName: req.body.displayName,
         hash: hash,
@@ -66,5 +66,5 @@ exports.registerUser = (req, res) => {
         console.log(`User Saved: ${ user }`);
     })
 
-    res.json('Registered user succesfully');
+    res.json('Registered user successfully');
 }
