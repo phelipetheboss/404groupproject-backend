@@ -57,7 +57,7 @@ exports.createSurvey = function(req, res){
 
 exports.updateSurvey = function(req, res){
     let id = req.params.id;
-    let currentDate = new Date().toISOString().split('T')[0];
+    let currentDate = new Date().toLocaleDateString('en-CA');
 
     let updatedSurvey = Survey({
         "_id": id,
