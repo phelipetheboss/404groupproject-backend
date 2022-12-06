@@ -5,11 +5,29 @@ let LoginResponse = require('../models/loginResponse.module');
 const { response } = require('express');
 
 exports.getSurveys = function(req, res, next){
+    let owner = req.params.owner;
+
     if(req.session.lastVisit){
         console.log(`Last visited: ${req.session.lastVisit}`);
     }
     req.session.lastVisit = new Date();
 
+    try{
+        Survey.find({"owner": owner}, (err, surveys) => {
+            if(err){
+                res.json(err);
+                return next(err);
+            }else {
+                res.json(surveys);
+            }
+        })
+    }catch(error){
+        res.json(error);
+        next(error);
+    }
+}
+
+exports.getAvailableSurveys = function(req, res, next){
     try{
         Survey.find({}, (err, surveys) => {
             if(err){
@@ -57,7 +75,7 @@ exports.createSurvey = function(req, res){
 
 exports.updateSurvey = function(req, res){
     let id = req.params.id;
-    let currentDate = new Date().toISOString().split('T')[0];
+    let currentDate = new Date().toLocaleDateString('en-CA');
 
     let updatedSurvey = Survey({
         "_id": id,
@@ -65,7 +83,7 @@ exports.updateSurvey = function(req, res){
         "lastModification": currentDate,
         "startDate": req.body.startDate,
         "endDate": req.body.endDate,
-        "link": req.body.link,
+        "owner": req.body.owner,
         "questions": req.body.questions
     });
 
@@ -147,38 +165,3 @@ exports.createResponse = function(req, res){
         }
     });
 }
-
-
-/*exports.postLogin = function(req, res){
-    
-    console.log(req.body);
-    
-    let email = req.body.name;
-    User.findOne({email:email}, (err, user) => {
-        if(err)
-        {
-            console.log(err);
-            res.end(err);
-        }
-        else
-        {
-            console.log(user);
-            if(user){
-                let response = new LoginResponse({
-                    success: true,
-                    token: "asdfasdfasdfasfdfgkhguyrhduhgerhgui 487ty73yt873yt782"
-                });
-
-            } else {
-                let response = new LoginResponse({
-                    success: false,
-                    token: ""
-                });
-            }
-            console.log(response);
-            res.json(response);
-        }
-    });
-
-
-}*/
