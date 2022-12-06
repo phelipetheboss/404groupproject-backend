@@ -8,31 +8,6 @@ exports.logoutUser = (req, res) => {
 }
 
 exports.loginUser = (req, res, next) => {
-    /*passport.authenticate('local', { failureMessage: 'Could not Authenticate', successMessage: 'Successfully Authenticated User'});
-    console.log(`Username: ${ req.body.username }`);
-    const user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        displayName: req.body.displayName
-    })
-    return res.status(200).json(user);*/
-    /*passport.authenticate('local',(err, user, info) => {
-        if(err){
-            console.log(err)
-            return next(err);
-        }
-        if(!user){
-            console.log('2')
-            return res.redirect('/home');
-        }
-        req.login(user, (err) => {
-            console.log('3')
-            if(err){
-                return next(err);
-            }
-            return res.redirect('/about');
-        })
-    })(req, res, next);*/
     passport.authenticate('local', function(err, user, info) {
         if (err){
             return res.status(501).json(err);
@@ -42,7 +17,7 @@ exports.loginUser = (req, res, next) => {
         }
         req.logIn(user, function(err) {
             if (err) { return res.status(501).json(err); }
-            return res.status(200).json({message:'Login Success'});
+            return res.status(200).json(user);
         });
     })(req, res, next);
 }

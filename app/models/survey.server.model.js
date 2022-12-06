@@ -24,6 +24,11 @@ const SurveySchema = new Schema
             default: '',
             trim: true
         },
+        owner: {
+            type: String,
+            default: "",
+            trim: true
+        },
         questions: 
         [
             {
