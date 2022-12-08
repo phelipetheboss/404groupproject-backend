@@ -1,8 +1,5 @@
 let Survey = require('../models/survey.server.model');
 let Response = require('../models/response.server.model');
-let User = require('../models/user.server.model');
-let LoginResponse = require('../models/loginResponse.module');
-const { response } = require('express');
 
 exports.getSurveys = function(req, res, next){
     let owner = req.params.owner;
@@ -28,8 +25,10 @@ exports.getSurveys = function(req, res, next){
 }
 
 exports.getAvailableSurveys = function(req, res, next){
+    let currentDate = new Date().toLocaleDateString('en-CA');
+
     try{
-        Survey.find({}, (err, surveys) => {
+        Survey.find({startDate: { $lte: currentDate }, endDate: { $gte: currentDate }}, (err, surveys) => {
             if(err){
                 res.json(err);
                 return next(err);
